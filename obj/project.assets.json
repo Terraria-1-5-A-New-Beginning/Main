@@ -31,19 +31,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\isaac\\.nuget\\packages\\": {}
+    "C:\\Users\\kiri\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\isaac\\OneDrive\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\ANB\\ANB.csproj",
-      "projectName": "ANB",
-      "projectPath": "C:\\Users\\isaac\\OneDrive\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\ANB\\ANB.csproj",
-      "packagesPath": "C:\\Users\\isaac\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\isaac\\OneDrive\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\ANB\\obj\\",
+      "projectUniqueName": "C:\\Users\\kiri\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\Main\\Main.csproj",
+      "projectName": "Main",
+      "projectPath": "C:\\Users\\kiri\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\Main\\Main.csproj",
+      "packagesPath": "C:\\Users\\kiri\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kiri\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\Main\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\isaac\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\kiri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -89,7 +94,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }
