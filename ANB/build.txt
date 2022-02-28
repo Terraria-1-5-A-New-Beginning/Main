@@ -1,3 +1,0 @@
-displayName = Terraria 1.5: A New Beginning
-author = ike
-version = 0.1
