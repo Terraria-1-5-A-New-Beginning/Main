@@ -7,7 +7,6 @@ namespace ANB.Projectiles
 {
 	public class StoneSwordRockProjectile : ModProjectile
 	{
-		int style;
 		int Timer = 0;
 		public override void SetStaticDefaults()
 		{
