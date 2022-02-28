@@ -5,23 +5,25 @@ using Terraria.ID;
 
 namespace ANB.Projectiles
 {
-    public class StoneSwordRockProjectile : ModProjectile
-    {
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[Projectile.type] = 3;
-        }
-        public override void SetDefaults()
-        {
-            Projectile.height = 6;
-            Projectile.width = 6;
-            Projectile.aiStyle = 0;
-            Projectile.DamageType = DamageClass.Melee;
-            Projectile.friendly = true;
-            Projectile.hostile = false;
-            Projectile.tileCollide = false;
-            Projectile.ignoreWater = true;
-        }
+	public class StoneSwordRockProjectile : ModProjectile
+	{
+		int style;
+		int Timer = 0;
+		public override void SetStaticDefaults()
+		{
+			Main.projFrames[Projectile.type] = 3;
+		}
+		public override void SetDefaults()
+		{
+			Projectile.height = 6;
+			Projectile.width = 6;
+			Projectile.aiStyle = 0;
+			Projectile.DamageType = DamageClass.Melee;
+			Projectile.friendly = true;
+			Projectile.hostile = false;
+			Projectile.tileCollide = false;
+			Projectile.ignoreWater = true;
+		}
 		public override void AI()
 		{
 			float maxDetectRadius = 400f; // The maximum radius at which a projectile can detect a target
@@ -77,4 +79,5 @@ namespace ANB.Projectiles
 
 			return closestNPC;
 		}
+	}
 }
