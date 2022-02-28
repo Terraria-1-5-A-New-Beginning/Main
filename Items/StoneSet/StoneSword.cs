@@ -5,6 +5,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using ANB.Rarities;
+using ANB.Projectiles;
 
 namespace ANB.Items.StoneSet
 {
@@ -44,11 +45,11 @@ namespace ANB.Items.StoneSet
         {
             if (target.value > 0f || (target.damage > 0 && !target.friendly))
             {
-                pumpkinSword(player, target.whoAmI, (int)(damage * 1.5), knockback);
+                StoneSwordProj(player, target.whoAmI, (int)(damage * 1.5), knockback);
             }
         }
 
-        private void pumpkinSword(Player player, int i, int dmg, float kb)
+        private void StoneSwordProj(Player player, int i, int dmg, float kb)
         {
             int num = Main.rand.Next(100, 300);
             int num2 = Main.rand.Next(100, 300);
@@ -79,7 +80,7 @@ namespace ANB.Items.StoneSet
             num4 *= num6;
             num5 *= num6;
             
-            Projectile.NewProjectile(new ProjectileSource_Item(player, Item), (float)num, (float)num2, num4, num5, ModContent.ProjectileType<Projectiles.StoneSwordRockProjectile1>(), dmg, kb, player.whoAmI, (float)i, 0f);
+            Projectile.NewProjectile(new ProjectileSource_Item(player, Item), (float)num, (float)num2, num4, num5, ModContent.ProjectileType<StoneSwordProj>(), dmg, kb, player.whoAmI, (float)i, 0f);
         }
     }
 }

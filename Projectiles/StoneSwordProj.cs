@@ -5,9 +5,10 @@ using Terraria.ID;
 
 namespace ANB.Projectiles
 {
-	public class StoneSwordRockProjectile : ModProjectile
+	public class StoneSwordProj : ModProjectile
 	{
 		public override string Texture => "Terraria/Images/NPC_" + NPCID.Pixie;//placeholder. because every single time i recompile the mod it tells me about missing texture
+		int style;
 		int Timer = 0;
 		public override void SetStaticDefaults()
 		{
