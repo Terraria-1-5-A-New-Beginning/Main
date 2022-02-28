@@ -40,6 +40,28 @@ namespace ANB.Projectiles
 			Projectile.rotation = Projectile.velocity.ToRotation();
 
 			Timer++;
+			if (Timer == 1)
+            {
+				style = Main.rand.Next(0, 2);
+            }
+			switch (style)
+            {
+                case 0:
+                    {
+						Projectile.frame = 0;
+                    }
+					break;
+				case 1:
+                    {
+						Projectile.frame = 1;
+                    }
+					break;
+				case 2:
+                    {
+						Projectile.frame = 2;
+                    }
+					break;
+            }
 
 		}
 
