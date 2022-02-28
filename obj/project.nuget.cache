@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CEBqv4wSXsUvUEhldLExC9ZB6FIqxLllUZYlAqJvdRIu6mAYDOcT1kuaaUz1GUYxcz8J7wDwNyHRCxqiM3t7aQ==",
+  "dgSpecHash": "Rp8m9puVuhu0+FtbjUBO1Rli7eeIRZPthnrlx0Wbu3+bfEMfDsMhEhtuaU/TLgXnyxuBYU1qE5LCC2g/okvy4w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\kiri\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\Main\\Main.csproj",
+  "projectFilePath": "C:\\Users\\kiri\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\ANB\\ANB.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kiri\\.nuget\\packages\\tmodloader.codeassist\\0.1.3\\tmodloader.codeassist.0.1.3.nupkg.sha512"
   ],
