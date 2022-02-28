@@ -47,7 +47,7 @@ namespace ANB.Items.StoneSet
             }
         }
 
-        private void pumpkinSword(Player player, int i, int dmg, float kb)
+        private void pumpkinSword(Player player, ProjectileSource_Item_WithAmmo source, int i, int dmg, float kb)
         {
             int num = Main.rand.Next(100, 300);
             int num2 = Main.rand.Next(100, 300);
@@ -77,7 +77,7 @@ namespace ANB.Items.StoneSet
             num6 = num3 / num6;
             num4 *= num6;
             num5 *= num6;
-            Projectile.NewProjectile((float)num, (float)num2, num4, num5, 321, dmg, kb, player.whoAmI, (float)i, 0f);
+            Projectile.NewProjectile(soruce,(float)num, (float)num2, num4, num5, 321, dmg, kb, player.whoAmI, (float)i, 0f);
         }
     }
 }
