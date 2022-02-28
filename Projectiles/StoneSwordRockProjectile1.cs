@@ -5,8 +5,9 @@ using Terraria.ID;
 
 namespace ANB.Projectiles
 {
-	public class StoneSwordRockProjectile : ModProjectile
+	public class StoneSwordRockProjectile1 : ModProjectile
 	{
+		int style;
 		int Timer = 0;
 		public override void SetStaticDefaults()
 		{

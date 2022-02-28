@@ -79,7 +79,7 @@ namespace ANB.Items.StoneSet
             num4 *= num6;
             num5 *= num6;
             
-            Projectile.NewProjectile(new ProjectileSource_Item(player, Item), (float)num, (float)num2, num4, num5, 321, dmg, kb, player.whoAmI, (float)i, 0f);
+            Projectile.NewProjectile(new ProjectileSource_Item(player, Item), (float)num, (float)num2, num4, num5, ModContent.ProjectileType<Projectiles.StoneSwordRockProjectile1>(), dmg, kb, player.whoAmI, (float)i, 0f);
         }
     }
 }
