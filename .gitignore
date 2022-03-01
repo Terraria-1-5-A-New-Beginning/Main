@@ -336,3 +336,4 @@ ASALocalRun/
 *.cache
 *.sln
 *.v2
+*.suo
