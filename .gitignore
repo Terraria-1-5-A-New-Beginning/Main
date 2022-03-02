@@ -336,3 +336,6 @@ ASALocalRun/
 *.cache
 *.sln
 *.v2
+*.suo
+.vs/ANB/v17/.suo
+.vs/ANB/DesignTimeBuild/.dtbcache.v2
