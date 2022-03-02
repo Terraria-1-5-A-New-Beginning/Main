@@ -13,7 +13,7 @@ namespace ANB.Items.StoneSet
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Just a simple stone sword...or is it?\n Explodes into flying debris after striking an enemy");
+            Tooltip.SetDefault("Just a simple stone sword...or is it?\nExplodes into flying debris after striking an enemy");
 
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
@@ -80,7 +80,7 @@ namespace ANB.Items.StoneSet
             num4 *= num6;
             num5 *= num6;
             
-            Projectile.NewProjectile(new ProjectileSource_Item(player, Item), (float)num, (float)num2, num4, num5, ModContent.ProjectileType<StoneSwordProj>(), dmg, kb, player.whoAmI, (float)i, 0f);
+            Projectile.NewProjectile(new EntitySource_ByItemSourceId(player, Item.whoAmI), (float)num, (float)num2, num4, num5, ModContent.ProjectileType<StoneSwordProj>(), dmg, kb, player.whoAmI, (float)i, 0f);
         }
     }
 }
