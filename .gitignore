@@ -345,3 +345,9 @@ NPCs/MemoryBoss/MemoryBoss.cs
 *.json
 obj/project.assets.json
 obj/project.nuget.cache
+*.v2
+.vs/ANB/DesignTimeBuild/.dtbcache.v2
+obj/project.assets.json
+*.json
+obj/project.nuget.cache
+*.cache
