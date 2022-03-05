@@ -46,7 +46,6 @@ namespace ANB.Projectiles
 				Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Items.StoneSet.StoneDust>());
             }
 			Projectile.Kill();
-			Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
 			SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
 		}
         public override bool OnTileCollide(Vector2 oldVelocity)
