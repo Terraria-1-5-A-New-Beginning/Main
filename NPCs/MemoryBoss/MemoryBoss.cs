@@ -1,4 +1,4 @@
-﻿/**using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +8,7 @@ using Terraria.ID;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Terraria.DataStructures;
 
 namespace ANB.NPCs.MemoryBoss
 {
@@ -40,6 +41,7 @@ namespace ANB.NPCs.MemoryBoss
         }
         public override void SetDefaults()
         {
+
             NPC.boss = true;
             NPC.knockBackResist = 0.1f;
             NPC.lifeMax = 200000;
@@ -57,6 +59,13 @@ namespace ANB.NPCs.MemoryBoss
             //i am not sure yet.
 
         }
+
+        public override void OnKill()
+        {
+            //NPC.GetGlobalNPC<MemoryGlobalNPC>().memory = false;
+            MemoryGlobalNPC.memory = false;
+            base.OnKill();
+        }
         #region CheckBoss stuff
         /// <summary>
         /// This check help spawn the boss
@@ -71,8 +80,8 @@ namespace ANB.NPCs.MemoryBoss
         {
             if (NPC.life <= NPC.lifeMax * hpmin && !bossbool)
             {
-                Memory = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type)];
-                Memory2 = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type2)];
+                Memory = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC),(int)NPC.position.X, (int)NPC.position.Y + 60, type)];
+                Memory2 = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC),(int)NPC.position.X, (int)NPC.position.Y + 60, type2)];
                 CombatText.NewText(NPC.getRect(), textColor, epicText);//cool line
                 Main.NewText(epicText, textColor);
                 bossbool = !bossbool;
@@ -82,9 +91,9 @@ namespace ANB.NPCs.MemoryBoss
         {
             if (NPC.life <= NPC.lifeMax * hpmin && !bossbool)
             {
-                Memory = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type)];
-                Memory2 = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type2)];
-                Memory3 = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type3)];
+                Memory = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC), (int)NPC.position.X, (int)NPC.position.Y + 60, type)];
+                Memory2 = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC), (int)NPC.position.X, (int)NPC.position.Y + 60, type2)];
+                Memory3 = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC), (int)NPC.position.X, (int)NPC.position.Y + 60, type3)];
                 CombatText.NewText(NPC.getRect(), textColor, epicText);//cool line
                 Main.NewText(epicText, textColor);
                 bossbool = !bossbool;
@@ -94,10 +103,10 @@ namespace ANB.NPCs.MemoryBoss
         {
             if (NPC.life <= NPC.lifeMax * hpmin && !bossbool)
             {
-                Memory = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type)];
-                Memory2 = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type2)];
-                Memory3 = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type3)];
-                Memory4 = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type4)];
+                Memory = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC), (int)NPC.position.X, (int)NPC.position.Y + 60, type)];
+                Memory2 = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC), (int)NPC.position.X, (int)NPC.position.Y + 60, type2)];
+                Memory3 = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC), (int)NPC.position.X, (int)NPC.position.Y + 60, type3)];
+                Memory4 = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC), (int)NPC.position.X, (int)NPC.position.Y + 60, type4)];
                 CombatText.NewText(NPC.getRect(), textColor, epicText);//cool line
                 Main.NewText(epicText, textColor);
                 bossbool = !bossbool;
@@ -107,7 +116,7 @@ namespace ANB.NPCs.MemoryBoss
         {
             if (NPC.life <= NPC.lifeMax * hpmin && !bossbool)
             {
-                Memory = Main.npc[NPC.NewNPC((int)NPC.position.X, (int)NPC.position.Y + 60, type)];
+                Memory = Main.npc[NPC.NewNPC(new EntitySource_BossSpawn(NPC), (int)NPC.position.X, (int)NPC.position.Y + 60, type)];
                 CombatText.NewText(NPC.getRect(), textColor, epicText);//cool line
                 Main.NewText(epicText, textColor);
                 bossbool = !bossbool;
@@ -132,7 +141,9 @@ namespace ANB.NPCs.MemoryBoss
         {
             if (first)
             {
-                Main.NewText("You feel like time is shattered across the entire world.");
+                MemoryGlobalNPC.memory = true;
+               // NPC.GetGlobalNPC<MemoryGlobalNPC>().memory = true;
+                Main.NewText("You feel like time has shattered across the entire world.\r\nYour memories are rushing back.\r\nIt's lore time!");
                 first = !first;
             }
             Main.time = 10000;
@@ -147,21 +158,21 @@ namespace ANB.NPCs.MemoryBoss
             bossAI();
 
 
-            CheckBoss(0.95f, ref KingSlime, ModContent.NPCType<MemoryMinions.MemorySlime>(), "Epic Text", Color.Red);
-            CheckBoss(0.85f, ref EyeCthulhu, ModContent.NPCType<MemoryMinions.MemoryCthulhu>(), "Epic Text", Color.Red);
-            CheckBoss(0.75f, ref BrainAndWorm, ModContent.NPCType<MemoryMinions.MemoryBrain>(), ModContent.NPCType<MemoryMinions.MemoryWorm>(), "Epic Text", Color.Red);
-            CheckBoss(0.65f, ref QueenBee, ModContent.NPCType<MemoryMinions.MemoryBee>(), "Epic Text", Color.Red);
-            CheckBoss(0.55f, ref Skeletron, ModContent.NPCType<MemoryMinions.MemorySkeletron>(), "Epic Text", Color.Red);
-            CheckBoss(0.45f, ref QueenSlime, ModContent.NPCType<MemoryMinions.MemorySlime>(), "Epic Text", Color.Red);
-            CheckBoss(0.35f, ref Mechas, ModContent.NPCType<MemoryMinions.MemorySlime>(), "Epic Text", Color.Red);
-            CheckBoss(0.25f, ref Golem, ModContent.NPCType<MemoryMinions.MemorySlime>(), "Epic Text", Color.Red);
-            CheckBoss(0.15f, ref Fishron, ModContent.NPCType<MemoryMinions.MemorySlime>(), "Epic Text", Color.Red);
-            CheckBoss(0.07f, ref Empress, ModContent.NPCType<MemoryMinions.MemorySlime>(), "Epic Text", Color.Red);
-            CheckBoss(0.02f, ref Lunatic, ModContent.NPCType<MemoryMinions.MemorySlime>(), "Epic Text", Color.Red);
+            CheckBoss(0.95f, ref KingSlime, NPCID.KingSlime, "Epic Text", Color.Red);
+            CheckBoss(0.85f, ref EyeCthulhu, NPCID.EyeofCthulhu, "Epic Text", Color.Red);
+            CheckBoss(0.75f, ref BrainAndWorm, NPCID.BrainofCthulhu, NPCID.EaterofWorldsHead, "Epic Text", Color.Red);
+            CheckBoss(0.65f, ref QueenBee, NPCID.QueenBee, "Epic Text", Color.Red);
+            CheckBoss(0.55f, ref Skeletron, NPCID.SkeletronHead, "Epic Text", Color.Red);
+            CheckBoss(0.45f, ref QueenSlime, NPCID.QueenSlimeBoss, "Epic Text", Color.Red);
+            CheckBoss(0.35f, ref Mechas, NPCID.Retinazer, "Epic Text", Color.Red);
+            CheckBoss(0.25f, ref Golem, NPCID.Golem, "Epic Text", Color.Red);
+            CheckBoss(0.15f, ref Fishron, NPCID.DukeFishron, "Epic Text", Color.Red);
+            CheckBoss(0.07f, ref Empress, NPCID.EmpressButterfly, "Epic Text", Color.Red);
+            CheckBoss(0.02f, ref Lunatic, NPCID.CultistBoss, "Epic Text", Color.Red);
 
 
             base.AI();
         }
 
     }
-}**/
+}

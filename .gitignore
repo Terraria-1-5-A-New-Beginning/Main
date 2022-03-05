@@ -339,3 +339,9 @@ ASALocalRun/
 *.suo
 .vs/ANB/v17/.suo
 .vs/ANB/DesignTimeBuild/.dtbcache.v2
+.vs/ANB/DesignTimeBuild/.dtbcache.v2
+.vs/ANB/v17/.suo
+NPCs/MemoryBoss/MemoryBoss.cs
+*.json
+obj/project.assets.json
+obj/project.nuget.cache
