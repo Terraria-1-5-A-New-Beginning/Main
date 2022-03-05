@@ -23,12 +23,12 @@ namespace ANB.Items.StoneSet
             Item.height = 16;
             Item.width = 16;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.useTime = 35;
-            Item.useAnimation = 35;
+            Item.useTime = 42;
+            Item.useAnimation = 42;
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Melee;
-            Item.damage = 15;
-            Item.knockBack = 9;
+            Item.damage = 30;
+            Item.knockBack = 4;
             Item.value = 50;
             Item.crit = 10;
             Item.rare = ModContent.RarityType<UpgradedRarity>();
@@ -36,7 +36,7 @@ namespace ANB.Items.StoneSet
         }
         public override void MeleeEffects(Player player, Rectangle hitbox)
         {
-            if (Main.rand.NextBool(20))
+            if (Main.rand.NextBool(3))
             {
                 Dust.NewDust(new Vector2(hitbox.X, hitbox.Y), hitbox.Width, hitbox.Height, ModContent.DustType<StoneSet.StoneDust>());
             }
@@ -46,11 +46,10 @@ namespace ANB.Items.StoneSet
             for (int i = 0; i < 3; i++)
             {
                 Vector2 position = player.Center;
-                Vector2 velocity = Vector2.Normalize(player.position - target.position).RotatedByRandom(6.28319);
+                Vector2 velocity = new Vector2(8).RotatedByRandom(6.28319);
                 IEntitySource source = new EntitySource_OnHit_ByItemSourceID(player, target, Item.whoAmI);
-                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<StoneSwordProj>(), damage, knockback);
+                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<StoneSwordProj>(), damage, knockback, Main.myPlayer);
             }
-            
         }
     }
 }
