@@ -20,6 +20,7 @@ namespace ANB.Items.StoneSet
         }
         public override void SetDefaults()
         {
+            
             Item.height = 16;
             Item.width = 16;
             Item.useStyle = ItemUseStyleID.Swing;
@@ -45,10 +46,12 @@ namespace ANB.Items.StoneSet
         {
             for (int i = 0; i < 3; i++)
             {
-                Vector2 position = player.Center;
-                Vector2 velocity = new Vector2(8).RotatedByRandom(6.28319);
+                Vector2 offset = (target.Center - player.Center);
+                offset.Normalize();
+                Vector2 position = target.Center;//player.Center+offset*40;
+                Vector2 velocity = Vector2.Normalize(player.position - target.position).RotatedByRandom(6.28319)*3;
                 IEntitySource source = new EntitySource_OnHit_ByItemSourceID(player, target, Item.whoAmI);
-                Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<StoneSwordProj>(), damage, knockback, Main.myPlayer);
+                Projectile.NewProjectile(source, position, velocity+new Vector2(0,-3), ModContent.ProjectileType<StoneSwordProj>(), damage, knockback, Main.myPlayer);
             }
         }
     }
