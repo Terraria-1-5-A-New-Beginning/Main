@@ -14,6 +14,11 @@ namespace ANB.NPCs.MemoryBoss
 {
     internal class MemoryBoss : ModNPC
     {
+        Vector2 FirstStageDestination = Vector2.Zero;
+        Vector2 LastFirstStageDestination = Vector2.Zero;
+        
+        int timer=100;
+        int attacktype=0;
         bool first = true;
         bool KingSlime = false;
         bool EyeCthulhu = false;
@@ -36,13 +41,30 @@ namespace ANB.NPCs.MemoryBoss
         //public override string Texture => "Terraria/Images/NPC_" + NPCID.Pixie;
         public override void SetStaticDefaults()
         {
+            NPCID.Sets.DontDoHardmodeScaling[Type] = true;
+            // Enemies can pick up coins, let's prevent it for this NPC
+            NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPC.boss = true;
+            NPCDebuffImmunityData debuffData = new NPCDebuffImmunityData
+            {
+                SpecificallyImmuneTo = new int[] {
+
+                    BuffID.Confused // Most NPCs have this
+				}
+            };
+            NPCID.Sets.DebuffImmunitySets.Add(Type, debuffData);
+
             base.SetStaticDefaults();
         }
         public override void SetDefaults()
         {
-            NPC.height = 100;
-            NPC.width = 100;
+            NPC.damage = 100;
+            NPC.height = 110;
+            NPC.width = 110;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.npcSlots = 10f;
+            NPC.defense = 200;
             NPC.noGravity = true;
             NPC.aiAction = 0;
             NPC.aiStyle = 0;
@@ -53,40 +75,99 @@ namespace ANB.NPCs.MemoryBoss
             NPC.life = 200000;
             base.SetDefaults();
         }
-
-        private void noAI()
-        {
-            NPC.velocity *= 0.96f;//slowly stop.
-        }
-        
         private void bossAI()
         {
-            NPC.ai[0] += 1.1f;
-            if (NPC.ai[0] > 360)
+            NPC.damage = 50;
+            NPC.alpha=0;
+            if (timer == 60 || timer == 50 || timer == 70)
             {
-                NPC.ai[0] = 0;
+                Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
+                    (-NPC.Center + Main.player[NPC.target].Center)/7, ProjectileID.EyeLaser, 70, 0);
             }
-            if (!Main.player[NPC.target].dead)
-            {
 
-                Vector2 desiredPos = Main.player[NPC.target].Center;
-                desiredPos += 300 * new Vector2((float)Math.Sin(MathHelper.ToRadians(NPC.ai[0])), (float)Math.Cos(MathHelper.ToRadians(NPC.ai[0])));
-                Vector2 mov = NPC.Center - desiredPos;
-                mov.Normalize();
-                NPC.velocity -= mov*(float)Math.Min((double)(NPC.Center - desiredPos).Length(), 2);
-                NPC.velocity *= 0.9f;
-            }
-            else
+            if ((timer == 0))
             {
-                NPC.velocity += Vector2.UnitY * 2;
+                timer = 70;
+                if ((Main.netMode != NetmodeID.MultiplayerClient))
+                {
+                    //NPC.velocity *= 0.96f;//slowly stop.
+                    FirstStageDestination = -NPC.Center + Main.player[NPC.target].Center;
+                    //FirstStageDestination.Normalize();
+                    //FirstStageDestination = FirstStageDestination * 400;
+                    //FirstStageDestination = NPC.Center+(-NPC.Center + Main.player[NPC.target].Center + FirstStageDestination).RotateRandom(MathHelper.PiOver2);
+                    //FirstStageDestination *= 1.2f;
+                    Vector2 FFStageDest = FirstStageDestination;
+                    FFStageDest.Normalize();
+
+                    FirstStageDestination = NPC.Center + (FFStageDest*400+ FirstStageDestination).RotateRandom(MathHelper.PiOver4/2);
+                    //NPC.netUpdate = true;
+                }
             }
-            if (NPC.velocity.Length() >= 30)
+            Vector2 toDestination = FirstStageDestination - NPC.Center;
+                Vector2 toDestinationNormalized = toDestination.SafeNormalize(Vector2.UnitY);
+                float speed = Math.Min(400, toDestination.Length());
+                NPC.velocity = toDestinationNormalized * speed / 20;
+                if (FirstStageDestination != LastFirstStageDestination)
+                {
+                    if (Main.netMode != NetmodeID.Server)
+                    {
+                        // For visuals regarding NPC position, netOffset has to be concidered to make visuals align properly
+                        NPC.position += NPC.netOffset;
+
+                        // Draw a line between the NPC and its destination, represented as dusts every 20 pixels
+                        Dust.QuickDustLine(NPC.Center + toDestinationNormalized * NPC.width, FirstStageDestination, toDestination.Length() / 20f, Color.Yellow);
+
+                        NPC.position -= NPC.netOffset;
+                    }
+                }
+                LastFirstStageDestination = FirstStageDestination;
+            
+        }
+        
+        private void noAI()
+        {
+            NPC.damage = 0;
+            NPC.alpha = 128;
+            if (timer == 0 && attacktype == 1)
             {
-                NPC.velocity.Normalize();
-                NPC.velocity *= 30;
+                attacktype = 0;
+                timer = 180;
             }
-            //todo
-            //i am not sure yet.
+            if (timer == 0 && attacktype == 0)
+            {
+                attacktype = 1;
+                timer = 40;
+            }
+
+            if (attacktype == 0)
+            {
+                NPC.ai[0] += 1.1f;
+                if (NPC.ai[0] > 360)
+                {
+                    NPC.ai[0] = 0;
+                }
+                if (!Main.player[NPC.target].dead)
+                {
+
+                    Vector2 desiredPos = Main.player[NPC.target].Center;
+                    desiredPos += 300 * new Vector2((float)Math.Sin(MathHelper.ToRadians(NPC.ai[0])), (float)Math.Cos(MathHelper.ToRadians(NPC.ai[0])));
+                    Vector2 mov = NPC.Center - desiredPos;
+                    mov.Normalize();
+                    NPC.velocity -= mov * (float)Math.Min((double)(NPC.Center - desiredPos).Length(), 2);
+                    NPC.velocity *= 0.9f;
+                }
+                if (NPC.velocity.Length() >= 30)
+                {
+                    NPC.velocity.Normalize();
+                    NPC.velocity *= 30;
+                }
+            }
+            if (attacktype == 1 && timer == 40)
+            {
+                NPC.velocity = Vector2.Zero;
+                Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
+                    (-NPC.Center+Main.player[NPC.target].Center)/4, ProjectileID.EyeLaser, 30, 0);
+            }
 
         }
 
@@ -169,38 +250,58 @@ namespace ANB.NPCs.MemoryBoss
 
         public override void AI()
         {
-            if (first)
+            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
-                MemoryGlobalNPC.memory = true;
-               // NPC.GetGlobalNPC<MemoryGlobalNPC>().memory = true;
-                Main.NewText("You feel like time has shattered across the entire world.\r\nYour memories are rushing back.\r\nIt's lore time!");
-                first = !first;
+                NPC.TargetClosest();
             }
-            Main.time = 10000;
-            if (!(Memory == null || !Memory.active)|| !(Memory2 == null || !Memory2.active) || !(Memory3 == null || !Memory3.active) || !(Memory4 == null || !Memory4.active))
+            timer--;
+            if (timer < 0)
             {
-                noAI();
-                canbehit = false;
-                base.AI();
-                return;//memory mode
+                timer = 0;
             }
-            canbehit = true;
-            bossAI();
+            if (Main.player[NPC.target].dead)
+            {
+                NPC.velocity += Vector2.UnitY * 2;
+            }
+            else
+            {
+                if (first)
+                {
+                    FirstStageDestination = NPC.position;
+                    LastFirstStageDestination = NPC.position;
+                    MemoryGlobalNPC.memory = true;
+                    // NPC.GetGlobalNPC<MemoryGlobalNPC>().memory = true;
+                    Main.NewText("You feel like time has shattered across the entire world.\r\nYour memories are rushing back.\r\nIt's lore time!");
+                    first = !first;
+                }
+                Main.dayTime = false;
+                Main.time = 0;
+                if (!(Memory == null || !Memory.active) || !(Memory2 == null || !Memory2.active) || !(Memory3 == null || !Memory3.active) || !(Memory4 == null || !Memory4.active))
+                {
+                    noAI();
+                    canbehit = false;
+                    base.AI();
+                    return;//memory mode
+                }
+                canbehit = true;
+                bossAI();
 
 
-            CheckBoss(0.95f, ref KingSlime, NPCID.KingSlime, "Epic Text", Color.Red);
-            CheckBoss(0.85f, ref EyeCthulhu, NPCID.EyeofCthulhu, "Epic Text", Color.Red);
-            CheckBoss(0.75f, ref BrainAndWorm, NPCID.BrainofCthulhu, NPCID.EaterofWorldsHead, "Epic Text", Color.Red);
-            CheckBoss(0.65f, ref QueenBee, NPCID.QueenBee, "Epic Text", Color.Red);
-            CheckBoss(0.55f, ref Skeletron, NPCID.SkeletronHead, "Epic Text", Color.Red);
-            CheckBoss(0.45f, ref QueenSlime, NPCID.QueenSlimeBoss, "Epic Text", Color.Red);
-            CheckBoss(0.35f, ref Mechas, NPCID.Retinazer, "Epic Text", Color.Red);
-            CheckBoss(0.25f, ref Golem, NPCID.Golem, "Epic Text", Color.Red);
-            CheckBoss(0.15f, ref Fishron, NPCID.DukeFishron, "Epic Text", Color.Red);
-            CheckBoss(0.07f, ref Empress, NPCID.EmpressButterfly, "Epic Text", Color.Red);
-            CheckBoss(0.02f, ref Lunatic, NPCID.CultistBoss, "Epic Text", Color.Red);
+                CheckBoss(0.95f, ref KingSlime, NPCID.KingSlime, "Epic Text", Color.Red);
+                CheckBoss(0.85f, ref EyeCthulhu, NPCID.EyeofCthulhu, "Epic Text", Color.Red);
+                CheckBoss(0.75f, ref BrainAndWorm, NPCID.BrainofCthulhu, NPCID.EaterofWorldsHead, "Epic Text", Color.Red);
+                CheckBoss(0.65f, ref QueenBee, NPCID.QueenBee, "Epic Text", Color.Red);
+                CheckBoss(0.55f, ref Skeletron, NPCID.SkeletronHead, "Epic Text", Color.Red);
+                CheckBoss(0.45f, ref QueenSlime, NPCID.QueenSlimeBoss, "Epic Text", Color.Red);
+                CheckBoss(0.35f, ref Mechas, NPCID.Retinazer, "Epic Text", Color.Red);
+                CheckBoss(0.25f, ref Golem, NPCID.Golem, "Epic Text", Color.Red);
+                CheckBoss(0.15f, ref Fishron, NPCID.DukeFishron, "Epic Text", Color.Red);
+                CheckBoss(0.07f, ref Empress, NPCID.EmpressButterfly, "Epic Text", Color.Red);
+                CheckBoss(0.02f, ref Lunatic, NPCID.CultistBoss, "Epic Text", Color.Red);
 
 
+                NPC.netUpdate = true;
+            }
             base.AI();
         }
 
