@@ -6,7 +6,6 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using ANB.Projectiles;
 using ANB.Buffs;
-using ANB.RecipeGroups;
 
 namespace ANB.Items
 {
