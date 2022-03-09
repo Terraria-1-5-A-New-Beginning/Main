@@ -33,7 +33,7 @@ namespace ANB.NPCs.MemoryBoss
         NPC Memory2 = null;
         NPC Memory3 = null;
         NPC Memory4 = null;//bad approach but anyway
-        public override string Texture => "Terraria/Images/NPC_" + NPCID.Pixie;
+        //public override string Texture => "Terraria/Images/NPC_" + NPCID.Pixie;
         public override void SetStaticDefaults()
         {
             NPC.boss = true;
@@ -41,9 +41,14 @@ namespace ANB.NPCs.MemoryBoss
         }
         public override void SetDefaults()
         {
-
+            NPC.height = 100;
+            NPC.width = 100;
+            NPC.noGravity = true;
+            NPC.aiAction = 0;
+            NPC.aiStyle = 0;
+            NPC.noTileCollide = true;
             NPC.boss = true;
-            NPC.knockBackResist = 0.1f;
+            NPC.knockBackResist = 0f;
             NPC.lifeMax = 200000;
             NPC.life = 200000;
             base.SetDefaults();
@@ -53,8 +58,33 @@ namespace ANB.NPCs.MemoryBoss
         {
             NPC.velocity *= 0.96f;//slowly stop.
         }
+        
         private void bossAI()
         {
+            NPC.ai[0] += 1.1f;
+            if (NPC.ai[0] > 360)
+            {
+                NPC.ai[0] = 0;
+            }
+            if (!Main.player[NPC.target].dead)
+            {
+
+                Vector2 desiredPos = Main.player[NPC.target].Center;
+                desiredPos += 300 * new Vector2((float)Math.Sin(MathHelper.ToRadians(NPC.ai[0])), (float)Math.Cos(MathHelper.ToRadians(NPC.ai[0])));
+                Vector2 mov = NPC.Center - desiredPos;
+                mov.Normalize();
+                NPC.velocity -= mov*(float)Math.Min((double)(NPC.Center - desiredPos).Length(), 2);
+                NPC.velocity *= 0.9f;
+            }
+            else
+            {
+                NPC.velocity += Vector2.UnitY * 2;
+            }
+            if (NPC.velocity.Length() >= 30)
+            {
+                NPC.velocity.Normalize();
+                NPC.velocity *= 30;
+            }
             //todo
             //i am not sure yet.
 
