@@ -22,7 +22,7 @@ namespace ANB.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			if (player.ownedProjectileCounts[ModContent.ProjectileType<StoneSwordProj>()] > 0) //set to fishstick one when made, stonesword so no errors
+			if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.FishStickSummon>()] > 0) //set to fishstick one when made, stonesword so no errors
 			{
 				player.buffTime[buffIndex] = 18000;
 			}

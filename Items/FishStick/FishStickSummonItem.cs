@@ -7,11 +7,10 @@ using Terraria.DataStructures;
 using ANB.Projectiles;
 using ANB.Buffs;
 
-namespace ANB.Items
+namespace ANB.Items.FishStick
 {
-    public class FishStickSummon : ModItem
+    public class FishStickSummonItem : ModItem
     {
-        //setting defaults, name Fish Stick-do later, tooltip- similar to other summon items
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Fish Stick");
@@ -38,20 +37,15 @@ namespace ANB.Items
             Item.noMelee = true;
             Item.DamageType = DamageClass.Summon;
             Item.buffType = ModContent.BuffType<FishStickSummonBuff>();
-            Item.shoot = ModContent.ProjectileType<StoneSwordProj>(); //again, replace with fish when made, for now stone
+            Item.shoot = ModContent.ProjectileType<Projectiles.FishStickSummon>();
         }
-        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-        {
-            position = Main.MouseWorld;
-        }//may need but don't want it to spawn on mouse, want it above head, maybe it will fly to above head tho
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)      
         {
             player.AddBuff(Item.buffType, 2);
-            var projectile = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, Main.myPlayer);
-            projectile.originalDamage = Item.damage;
 
-            return false;
-        }
+            position = Main.MouseWorld;
+            return true;
+        }//may need but don't want it to spawn on mouse, want it above head, maybe it will fly to above head tho
         public override void AddRecipes()
         {
             CreateRecipe()

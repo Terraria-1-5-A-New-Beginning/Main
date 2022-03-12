@@ -33,7 +33,7 @@ namespace ANB.Items.StoneSet
             Item.value = 50;
             Item.crit = 10;
             Item.rare = ModContent.RarityType<UpgradedRarity>();
-            Item.UseSound = SoundID.DD2_MonkStaffGroundMiss;
+            Item.UseSound = SoundID.Item1;
         }
         public override void MeleeEffects(Player player, Rectangle hitbox)
         {
