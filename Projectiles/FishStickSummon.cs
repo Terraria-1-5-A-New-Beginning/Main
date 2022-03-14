@@ -21,9 +21,10 @@ namespace ANB.Projectiles
         }
         public override void SetDefaults()
         {
+            //Projectile.gfxOffY = -10;
             Projectile.damage = 8;
-            Projectile.width = 18;
-            Projectile.height = 11;
+            Projectile.width = 38;
+            Projectile.height = 24;
             Projectile.knockBack = 1f;
             Projectile.tileCollide = false;
             Projectile.friendly = true;
@@ -54,24 +55,42 @@ namespace ANB.Projectiles
             //position above player, edit with testing
             Vector2 position = player.Center;
             Vector2 direction = player.Center;
-            position.Y -= 15f;
-            float minionPositionOffsetX = Projectile.minionPos * 40 * -player.direction;
-            position.X += minionPositionOffsetX;
-            Projectile.position = position;
-            Vector2 minionOffset = position;
+            position.Y -= 35f;
+            float minionPositionOffsetX = Projectile.minionPos * 50 * -player.direction;
+            position.X += minionPositionOffsetX+50 * -player.direction;
+            //Projectile.position = position;
+            //Vector2 minionOffset = position;
+
+            Projectile.velocity *= 0.7f;//for braking
+            Projectile.velocity += 0.02f * (-Projectile.Center + position);
 
             //this should make it teleport to player after getting too far away, needs testing
-            float distanceFromPlayer = Projectile.DistanceSQ(player.Center);
 
-            if(distanceFromPlayer >= 1000*1000f)
+            float distanceFromPlayer = Projectile.DistanceSQ(player.Center);
+            if (distanceFromPlayer >= 10000000f)
             {
-                Projectile.Center = minionOffset;
+                Projectile.Center = Main.player[Projectile.owner].Center;
             }
 
             //lean towards velocity, face towards velocity
             Projectile.rotation = Projectile.velocity.ToRotation();
-            Projectile.spriteDirection = Projectile.direction;
+            //Projectile.spriteDirection = Projectile.direction;<--ikee, spritedirection is used for reversion of proj. sprite, not for rotating it 
+            
+            if (Projectile.velocity.X < 0)
+            {
+                Projectile.spriteDirection = -1;
+                Projectile.rotation += MathHelper.Pi;
 
+            }
+            else
+            {
+                Projectile.spriteDirection = 1;
+            }
+            if (Projectile.velocity.LengthSquared() < 0.6f)
+            {
+                Projectile.rotation = (Main.player[Projectile.owner].direction == 1 ? MathHelper.TwoPi : 0);
+                Projectile.spriteDirection = Main.player[Projectile.owner].direction;//possibly buggy code
+            }
             float maxDetectRadius = 360f;
             //find closest NPC
             NPC closestNPC = FindClosestNPC(maxDetectRadius);
@@ -83,7 +102,7 @@ namespace ANB.Projectiles
             Projectile.ai[0]++;
             if (Projectile.ai[0] > 15)
             {
-                Projectile.NewProjectile(source, position, closestNPC.Center, ModContent.ProjectileType<FishStickSummonProj>(), 8, 1, Main.myPlayer);
+                Projectile.NewProjectile(source, Projectile.Center, closestNPC.Center, ModContent.ProjectileType<FishStickSummonProj>(), 8, 1, Main.myPlayer);
                 Projectile.ai[0] = 0;
             }
         }
@@ -107,6 +126,11 @@ namespace ANB.Projectiles
                 }
             }
             return closestNPC;
+        }
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            hitbox = new Rectangle(hitbox.X, hitbox.Y, 18, 11);
+            base.ModifyDamageHitbox(ref hitbox);
         }
     }
 }

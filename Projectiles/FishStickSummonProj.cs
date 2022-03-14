@@ -10,8 +10,8 @@ namespace ANB.Projectiles
     {
         public override void SetDefaults()
         {
-            Projectile.height = 4;
-            Projectile.width = 4;
+            Projectile.height = 8;
+            Projectile.width = 8;
             Projectile.damage = 8;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.ignoreWater = true;
@@ -23,6 +23,7 @@ namespace ANB.Projectiles
         }
         public override void AI()
         {
+            Dust.NewDust(Projectile.Center, 1, 1, DustID.BubbleBurst_Blue, 0, 0);
             float maxDetectRadius = 400f;
             float projSpeed = 16f;
 
