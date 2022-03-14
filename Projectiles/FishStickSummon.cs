@@ -91,7 +91,7 @@ namespace ANB.Projectiles
                 Projectile.rotation = (Main.player[Projectile.owner].direction == 1 ? MathHelper.TwoPi : 0);
                 Projectile.spriteDirection = Main.player[Projectile.owner].direction;//possibly buggy code
             }
-            float maxDetectRadius = 360f;
+            float maxDetectRadius = 800f;
             //find closest NPC
             NPC closestNPC = FindClosestNPC(maxDetectRadius);
             if (closestNPC == null)

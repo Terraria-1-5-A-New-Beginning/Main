@@ -41,6 +41,7 @@ namespace ANB.NPCs.MemoryBoss
         //public override string Texture => "Terraria/Images/NPC_" + NPCID.Pixie;
         public override void SetStaticDefaults()
         {
+            Main.npcFrameCount[NPC.type] = 4;
             NPCID.Sets.DontDoHardmodeScaling[Type] = true;
             // Enemies can pick up coins, let's prevent it for this NPC
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
@@ -59,8 +60,8 @@ namespace ANB.NPCs.MemoryBoss
         public override void SetDefaults()
         {
             NPC.damage = 100;
-            NPC.height = 110;
-            NPC.width = 110;
+            NPC.height = 52;
+            NPC.width = 44;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.npcSlots = 10f;
@@ -115,7 +116,7 @@ namespace ANB.NPCs.MemoryBoss
                         NPC.position += NPC.netOffset;
 
                         // Draw a line between the NPC and its destination, represented as dusts every 20 pixels
-                        Dust.QuickDustLine(NPC.Center + toDestinationNormalized * NPC.width, FirstStageDestination, toDestination.Length() / 20f, Color.Yellow);
+                        Dust.QuickDustLine(NPC.Center + toDestinationNormalized * NPC.width, FirstStageDestination, toDestination.Length() / 20f, Color.Purple);
 
                         NPC.position -= NPC.netOffset;
                     }
@@ -244,12 +245,20 @@ namespace ANB.NPCs.MemoryBoss
             return false;
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {if (canbehit) return base.PreDraw(spriteBatch, screenPos, drawColor);
+        {
+            if (++NPC.frameCounter >= 6)
+            {
+                NPC.frameCounter = 0;
+                NPC.frame.Y += 52;
+                NPC.frame.Y = NPC.frame.Y % 208;
+            }
+            if (canbehit) return base.PreDraw(spriteBatch, screenPos, drawColor);
             return base.PreDraw(spriteBatch, screenPos, new Color (255, 255, 255, 64));
         }
-
+        
         public override void AI()
         {
+            
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
                 NPC.TargetClosest();
