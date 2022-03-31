@@ -17,14 +17,14 @@ namespace ANB.Projectiles
             Main.projPet[Projectile.type] = true;
             ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
-            Main.projFrames[Projectile.type] = 3;
+            Main.projFrames[Projectile.type] = 7;
         }
         public override void SetDefaults()
         {
             //Projectile.gfxOffY = -10;
             Projectile.damage = 8;
-            Projectile.width = 38;
-            Projectile.height = 24;
+            Projectile.width = 36;
+            Projectile.height = 14;
             Projectile.knockBack = 1f;
             Projectile.tileCollide = false;
             Projectile.friendly = true;
@@ -46,7 +46,7 @@ namespace ANB.Projectiles
             }
 
             //animation
-            if (++Projectile.frameCounter >= 12)
+            if (++Projectile.frameCounter >= 28)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame = ++Projectile.frame % Main.projFrames[Projectile.type];

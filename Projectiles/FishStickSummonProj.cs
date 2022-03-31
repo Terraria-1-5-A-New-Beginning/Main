@@ -10,8 +10,8 @@ namespace ANB.Projectiles
     {
         public override void SetDefaults()
         {
-            Projectile.height = 8;
-            Projectile.width = 8;
+            Projectile.height = 14;
+            Projectile.width = 14;
             Projectile.damage = 8;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.ignoreWater = true;
