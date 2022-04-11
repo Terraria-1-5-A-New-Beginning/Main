@@ -1,1 +1,1 @@
-Terraria 1.5: A New Beginning is a pretty cool mod, it does...this. Modify this file with a description of your mod.
+A general content mod, aiming to expand upon the simple world of vanilla terraria...or something idk

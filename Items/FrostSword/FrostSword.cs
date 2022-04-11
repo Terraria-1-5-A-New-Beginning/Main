@@ -17,7 +17,7 @@ namespace ANB.Items.FrostSword
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("avalanche");
+            DisplayName.SetDefault("Avalanche");
             Tooltip.SetDefault("Hybrid weapon. Right click when you deal enough damage to summon ice witch.WIP");
         }
 

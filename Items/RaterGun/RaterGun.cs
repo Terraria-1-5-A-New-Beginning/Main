@@ -32,7 +32,7 @@ namespace ANB.Items.RaterGun
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useAmmo = ItemID.Gel;
             Item.DamageType = DamageClass.Ranged;
-            Item.damage = 8;
+            Item.damage = 12;
             Item.shoot = ModContent.ProjectileType<RaterGunProj>();
             base.SetDefaults();
         }

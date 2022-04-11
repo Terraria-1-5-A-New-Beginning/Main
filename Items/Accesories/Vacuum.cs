@@ -12,6 +12,7 @@ namespace ANB.Items.Accesories
     {
         public override void SetStaticDefaults()
         {
+            Tooltip.SetDefault("Increases pickup range for everything. Does not stack with similar items");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
         public override void SetDefaults()
@@ -27,6 +28,7 @@ namespace ANB.Items.Accesories
             player.manaMagnet = true;
             player.goldRing = true;
             player.treasureMagnet = true;
+            player.lifeMagnet = true;
         }
     }
 }
