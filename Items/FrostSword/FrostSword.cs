@@ -29,75 +29,85 @@ namespace ANB.Items.FrostSword
         public override void SetDefaults()
         {
             Item.autoReuse = true;
+            Item.knockBack = 4;
+            Item.width = 42;
+            Item.height = 42;
             Item.damage = 30;
             Item.DamageType = DamageClass.Melee;
             Item.useTime = 10;
             Item.useAnimation = 10;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.noMelee = false;
-            Item.noUseGraphic = false;
             Item.shoot = 0;
             Item.useTurn = true;//bc of strange bug i specified that player is allowed to turn while using item
             base.SetDefaults();//most vanilla sword allow player to turn around anyway.
         }
-        public override bool CanUseItem(Player Player)
+
+        public override bool? CanAutoReuseItem(Player player)
         {
-			if (Player.altFunctionUse == 2)
+
+            if (player.altFunctionUse == 2)
+            {
+                return false;
+            }
+            else
+            {
+                return base.CanAutoReuseItem(player);
+            }
+        }
+
+        public override bool CanUseItem(Player player)
+        {
+            Item.UseSound = SoundID.Item1;
+            Item.knockBack = 4;
+            Item.channel = false;
+            Item.noMelee = false;
+            if (player.altFunctionUse == 2)
 			{//IF RIGHT CLICK
-                if (Player.GetModPlayer<ANBModPlayer>().FrostDamage < Player.GetModPlayer<ANBModPlayer>().FrostDamageMeter)
+                if (player.GetModPlayer<ANBModPlayer>().FrostDamage < player.GetModPlayer<ANBModPlayer>().FrostDamageMeter)
                 {
                     return false;
                 }
-                Player.GetModPlayer<ANBModPlayer>().FrostDamage = 0;
+                player.GetModPlayer<ANBModPlayer>().FrostDamage = 0;
                 Item.mana = 0;
 				Item.shoot = ProjectileID.None;
-				Item.useTime = 10;
-                Item.useAnimation = 10;
-                Item.noUseGraphic = true;
-				Item.noMelee = true;
-				Item.channel = true;
+				Item.useTime = -1;//<--dont touch these are intentional.
+                Item.useAnimation = -1;//<--dont touch these are intentional.
+                Item.noMelee = true;
 				Item.shootSpeed = 0;
-                Item.autoReuse = false;
-
-				Item.useStyle = ItemUseStyleID.HoldUp;
 				Item.UseSound = SoundID.DD2_SkyDragonsFurySwing;
-				int a = Projectile.NewProjectile(Player.GetProjectileSource_Item(Item), Player.Center, Vector2.Zero, ModContent.ProjectileType<IceWitch>(), 0, 0, Player.whoAmI);
+				int a = Projectile.NewProjectile(player.GetProjectileSource_Item(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<IceWitch>(), 0, 0, player.whoAmI);
 				
             }
             else
             {
-                Item.autoReuse = true;
-                Item.noMelee = false;
-                Item.noUseGraphic = false;
-                Item.channel = false;
-                Item.useStyle = ItemUseStyleID.Swing;
-                Item.DamageType = DamageClass.Melee;
 
-                switch (Player.GetModPlayer<ANBModPlayer>().FrostSword) {
+                switch (player.GetModPlayer<ANBModPlayer>().FrostSword) {
                     case >=0 and <=2:
                         Item.damage = 40;
-                        Item.useTime = 25;
-                        Item.useAnimation = 25;
+                        Item.useTime = 15;
+                        Item.useAnimation = 15;
                         Item.shoot = 0;
                         Item.shootSpeed = 0;
                         break;
                     case >= 3 and <= 5:
                         Item.damage = 45;
-                        Item.useTime = 40;
-                        Item.useAnimation = 40;
+                        Item.useTime = 20;
+                        Item.useAnimation = 20;
                         Item.shoot = 0;
                         Item.shootSpeed = 0;
                         break;
                     case >= 6 and <= 8:
+                            Dust.NewDust(player.Center-new Vector2(6,9), 12, 18, DustID.SnowBlock);
+
                         Item.damage = 55;
-                        Item.useTime = 55;
-                        Item.useAnimation = 55;
+                        Item.useTime = 25;
+                        Item.useAnimation = 25;
                         Item.shoot = ModContent.ProjectileType<FrostSnowflake>();
                         Item.shootSpeed = 6;
                         break;
                 }
             }
-            Player.GetModPlayer<ANBModPlayer>().NextAtk();
+            player.GetModPlayer<ANBModPlayer>().NextAtk();
             return true;
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

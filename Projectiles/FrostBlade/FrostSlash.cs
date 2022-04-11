@@ -13,8 +13,9 @@ namespace ANB.Projectiles.FrostBlade
         public override void SetDefaults()
         {
             Projectile.timeLeft = 120;
-            Projectile.height = 59;
-            Projectile.width = 59;
+            Projectile.height = 20;
+            Projectile.width = 20;
+            Projectile.penetrate = 1;
             Projectile.tileCollide = false;
             Projectile.hostile = false;
             Projectile.friendly = true;
@@ -24,10 +25,21 @@ namespace ANB.Projectiles.FrostBlade
         {
             Main.player[Projectile.owner].GetModPlayer<ANBModPlayer>().AddFrostMeter(damage);
             base.OnHitNPC(target, damage, knockback, crit);
+            Projectile.penetrate = -1;
         }
-
+        
         public override void AI()
-        {
+        {if (Projectile.penetrate == -1)
+            {
+                Projectile.hostile = false;
+                Projectile.friendly = false;
+                Projectile.alpha += 25;
+                Projectile.velocity *= 0.9f;
+                if (Projectile.alpha >= 250)
+                {
+                    Projectile.Kill();
+                }
+            }
             Projectile.rotation = Projectile.velocity.ToRotation();
             base.AI();
         }
