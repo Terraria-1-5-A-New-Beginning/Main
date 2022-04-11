@@ -15,7 +15,7 @@ namespace ANB
     {
         public int FrostDamage = 0;
         public int FrostSword = 0;
-        public int FrostDamageMeter = 500;
+        public int FrostDamageMeter = 1200;
         public override void OnRespawn(Player player)
         {
             FrostDamage = 0;
@@ -25,8 +25,9 @@ namespace ANB
         public void AddFrostMeter(int damage)
         {
             if ((FrostDamage< FrostDamageMeter) && (FrostDamage+damage > FrostDamageMeter))
-            {
-                CombatText.NewText(Player.getRect(), Color.CadetBlue, "Frost Attack Ready!", true, true);
+            { Rectangle s = Player.getRect();
+                s.Y -= 6;
+                CombatText.NewText(s, Color.CadetBlue, "Frost Attack Ready!", true, true);
             }
             FrostDamage += damage;
         }
@@ -38,7 +39,7 @@ namespace ANB
                 {
                     Vector2 vel = (-Player.Center + Main.MouseWorld);
                     vel.Normalize();
-                    Projectile.NewProjectile(new EntitySource_ByItemSourceId(Player, Player.HeldItem.type), Player.Center, vel*10, ModContent.ProjectileType<FrostSlash>(), 100, 2, Player.whoAmI);
+                    Projectile.NewProjectile(new EntitySource_ByItemSourceId(Player, Player.HeldItem.type), Player.Center-new Vector2(0, 3), vel*10, ModContent.ProjectileType<FrostSlash>(), 100, 2, Player.whoAmI);
                 }
                 FrostSword = 0;
             }
@@ -48,7 +49,9 @@ namespace ANB
 
         public void NextAtk()
         {
-            CombatText.NewText(Player.getRect(), Color.CadetBlue, FrostSword, true, true);
+            Rectangle s = Player.getRect();
+            s.Y -= 6;
+            CombatText.NewText(s, Color.CadetBlue, FrostSword, true, true);
             FrostSword++;
             if (FrostSword == 9)
             {
