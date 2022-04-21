@@ -39,7 +39,7 @@ namespace ANB
                 {
                     Vector2 vel = (-Player.Center + Main.MouseWorld);
                     vel.Normalize();
-                    Projectile.NewProjectile(new EntitySource_ByItemSourceId(Player, Player.HeldItem.type), Player.Center-new Vector2(0, 3), vel*10, ModContent.ProjectileType<FrostSlash>(), 100, 2, Player.whoAmI);
+                    Projectile.NewProjectile(new EntitySource_ItemUse(Player, Player.HeldItem), Player.Center-new Vector2(0, 3), vel*10, ModContent.ProjectileType<FrostSlash>(), 100, 2, Player.whoAmI);
                 }
                 FrostSword = 0;
             }

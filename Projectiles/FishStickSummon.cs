@@ -97,11 +97,11 @@ namespace ANB.Projectiles
             if (closestNPC == null)
                 return;
             Vector2 velocity = closestNPC.Center - Projectile.Center;
-            IEntitySource source = new EntitySource_OnHit_ByItemSourceID(player, closestNPC, Projectile.whoAmI);
             
             Projectile.ai[0]++;
             if (Projectile.ai[0] > 15)
             {
+                IEntitySource source = Projectile.GetSource_FromAI();
                 Projectile.NewProjectile(source, Projectile.Center, closestNPC.Center, ModContent.ProjectileType<FishStickSummonProj>(), 8, 1, Main.myPlayer);
                 Projectile.ai[0] = 0;
             }

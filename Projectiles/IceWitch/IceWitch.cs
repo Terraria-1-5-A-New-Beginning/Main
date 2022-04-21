@@ -32,7 +32,7 @@ namespace ANB.Projectiles.IceWitch
             {
                 for (int a =0; a < 10; a++)
                 {
-                    Projectile.NewProjectile(new EntitySource_ByProjectileSourceId(Projectile.type), Projectile.Center, Vector2.One.RotatedBy(MathHelper.ToRadians(36*a))*5, ModContent.ProjectileType<FrostSnowflake>(), 50, 2, Projectile.owner);
+                    Projectile.NewProjectile(new EntitySource_SpawnNPC(), Projectile.Center, Vector2.One.RotatedBy(MathHelper.ToRadians(36*a))*5, ModContent.ProjectileType<FrostSnowflake>(), 50, 2, Projectile.owner);
                 }
             }
             base.AI();
