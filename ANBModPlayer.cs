@@ -9,10 +9,11 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using ANB.Projectiles.FrostBlade;
 
-namespace ANB
+namespace ANB//TODO: Vortech laser rifle and pistol maybe?
 {
     internal class ANBModPlayer : ModPlayer
     {
+        public float ShakeStrength = 0;
         public int FrostDamage = 0;
         public int FrostSword = 0;
         public int FrostDamageMeter = 1200;
@@ -22,6 +23,30 @@ namespace ANB
             FrostSword = 0;
             base.OnRespawn(player);
         }
+        public void ApplyShake(int strength= 5)
+        {
+            ShakeStrength = strength;
+
+        }
+        public override void ModifyScreenPosition()
+        {
+            if (ShakeStrength > 0)
+            {
+                if (Main.myPlayer == Player.whoAmI)
+                {
+                    Vector2 sh = ShakeStrength * Vector2.UnitX.RotatedByRandom(MathHelper.ToRadians(360));
+                    sh.X = (int)sh.X;
+                    sh.Y = (int)sh.Y;
+                    Main.screenPosition += sh;
+                }
+                ShakeStrength *= 0.93f;
+                if (ShakeStrength < 0.2f) ShakeStrength = 0;
+            }
+            base.ModifyScreenPosition();
+        }
+
+
+
         public void AddFrostMeter(int damage)
         {
             if ((FrostDamage< FrostDamageMeter) && (FrostDamage+damage > FrostDamageMeter))
