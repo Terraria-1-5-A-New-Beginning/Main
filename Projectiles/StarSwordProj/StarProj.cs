@@ -11,6 +11,7 @@ namespace ANB.Projectiles.StarSwordProj
     {
         public override void SetDefaults()
         {
+			Projectile.damage = 20; //<---- bad
             Projectile.height = 6; //placeholder
             Projectile.width = 6; //placeholder
             Projectile.knockBack = 2;
@@ -18,31 +19,42 @@ namespace ANB.Projectiles.StarSwordProj
             Projectile.ignoreWater = true;
 			Projectile.aiStyle = 0;
 			Projectile.light = 1f;
-        }
+			Projectile.friendly = true;
+			Projectile.hostile = false;
+		}
 
         public override void AI()
         {
-			float maxDetectRadius = 6f;
+			float maxDetectRadius = 600f;
 			float projSpeed = 6f;
 
-			Vector2 target1 = Main.rand.NextVector2CircularEdge(1f, 1f);
-			Projectile.velocity = target1 * projSpeed;
+			//Vector2 target1 = Main.rand.NextVector2CircularEdge(60f, 60f);
+			//Projectile.velocity = target1 * projSpeed;
+
 			Projectile.rotation = Projectile.velocity.ToRotation();
 			
 			NPC closestNPC = FindClosestNPC(maxDetectRadius);
-			if (closestNPC == null)
-				return;
-
 			Projectile.ai[0]++;
-			if (Projectile.ai[0] > 30)
+			if (Projectile.ai[0] > 60)
             {
-				Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.Zero) * projSpeed;
-				Projectile.rotation = Projectile.velocity.ToRotation();
-
-				Projectile.ai[0] = 0;
+				if (closestNPC == null || !closestNPC.active)
+				{
+					Projectile.Kill();
+					return;
+				}
+				else
+				{
+					Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.UnitX) * projSpeed;
+					//Projectile.ai[0] = 0;
+				}
             }
+            else
+            {
+				Projectile.ai[0]++;
+            }
+			Projectile.rotation = Projectile.velocity.ToRotation();
 
-            
+
 			base.AI();
         }
 		public NPC FindClosestNPC(float maxDetectDistance)
