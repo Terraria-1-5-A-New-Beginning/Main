@@ -50,7 +50,7 @@ namespace ANB.Items.StoneSet
                 offset.Normalize();
                 Vector2 position = target.Center;//player.Center+offset*40;
                 Vector2 velocity = Vector2.Normalize(player.position - target.position).RotatedByRandom(6.28319)*3;
-                IEntitySource source = new EntitySource_OnHit_ByItemSourceID(player, target, Item.whoAmI);
+                IEntitySource source = new EntitySource_OnHit(player, target);
                 Projectile.NewProjectile(source, position, velocity+new Vector2(0,-3), ModContent.ProjectileType<StoneSwordProj>(), damage, knockback, Main.myPlayer);
             }
         }
