@@ -75,7 +75,7 @@ namespace ANB.Items.FrostSword
                 Item.noMelee = true;
 				Item.shootSpeed = 0;
 				Item.UseSound = SoundID.DD2_SkyDragonsFurySwing;
-				int a = Projectile.NewProjectile(player.GetProjectileSource_Item(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<IceWitch>(), 0, 0, player.whoAmI);
+				int a = Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<IceWitch>(), 0, 0, player.whoAmI);
 				
             }
             else
