@@ -25,6 +25,7 @@ namespace ANB.Items.VorTech
 
         public override void SetDefaults()
         {
+            Item.noMelee = true;
             Item.autoReuse = false;
             Item.shootSpeed = 6;
             Item.useTime = 60;
@@ -41,8 +42,9 @@ namespace ANB.Items.VorTech
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            int rn= Main.rand.Next(2);
+            int rn= Main.rand.Next(3);
             Main.NewText(rn);
+            if (player.name == "Kirilland-Tester") rn = 0;
             if (rn == 0)
             {
                 player.GetModPlayer<ANBModPlayer>().ApplyShake();

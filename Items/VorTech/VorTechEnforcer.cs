@@ -24,6 +24,7 @@ namespace ANB.Items.VorTech
 
         public override void SetDefaults()
         {
+            Item.noMelee = true;
             Item.autoReuse = true;
             Item.shootSpeed = 12;
             Item.useTime = 16;

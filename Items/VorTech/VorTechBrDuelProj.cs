@@ -10,16 +10,19 @@ using Terraria;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 
 
 namespace ANB.Items.VorTech
 {
     internal class VorTechBrDuelProj : ModProjectile
     {
+        FlameLashDrawer s;
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 14;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
         }
         public override void SetDefaults()
         {
@@ -28,9 +31,14 @@ namespace ANB.Items.VorTech
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.width = 4;
-            Projectile.height = 4;
+            Projectile.height =4;
 
             base.SetDefaults();
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            s = new FlameLashDrawer();
+            base.OnSpawn(source);
         }
         public override void AI()
         {
@@ -41,6 +49,7 @@ namespace ANB.Items.VorTech
 
         public override void PostDraw(Color lightColor)
         {
+            s.Draw(Projectile);
             Main.instance.LoadProjectile(Projectile.type);
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
             Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
