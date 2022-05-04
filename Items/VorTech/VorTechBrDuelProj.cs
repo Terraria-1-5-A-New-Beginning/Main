@@ -21,13 +21,13 @@ namespace ANB.Items.VorTech
         FlameLashDrawer s;
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 14;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 64;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 3;
         }
         public override void SetDefaults()
         {
             Projectile.extraUpdates = 6;
-            Projectile.timeLeft = 100;
+            Projectile.timeLeft = 600;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.width = 4;
@@ -37,6 +37,8 @@ namespace ANB.Items.VorTech
         }
         public override void OnSpawn(IEntitySource source)
         {
+            Projectile.localAI[0] = 1;
+            Projectile.localAI[1] = 1;
             s = new FlameLashDrawer();
             base.OnSpawn(source);
         }
@@ -46,20 +48,11 @@ namespace ANB.Items.VorTech
 
             base.AI();
         }
-
-        public override void PostDraw(Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             s.Draw(Projectile);
-            Main.instance.LoadProjectile(Projectile.type);
-            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-            Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-            for (int k = 0; k < Projectile.oldPos.Length; k++)
-            {
-                Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
-            }
-            base.PostDraw(lightColor);
+            return false;
+            return base.PreDraw(ref lightColor);
         }
 
     }
