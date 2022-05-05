@@ -47,11 +47,12 @@ namespace ANB.Projectiles.StarSwordProj
 			
 			NPC closestNPC = FindClosestNPC(maxDetectRadius);
 			Projectile.ai[0]++;
-			if (Projectile.ai[0] == 61)
+			if (Projectile.ai[0] == 60)
             {
-				Dust.NewDust(Projectile.position, 1,1, DustID.YellowStarDust);
+				for (int f =0; f<6;f++)
+				Dust.NewDust(Projectile.position, 1,1, DustID.VilePowder);
 
-            }
+			}
 				if (Projectile.ai[0] > 60)
 			{
 				Projectile.friendly = true;
