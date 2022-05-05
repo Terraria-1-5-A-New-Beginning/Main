@@ -62,7 +62,7 @@ namespace ANB.Projectiles.StarSwordProj
 				}
 				else
 				{
-					Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.UnitX) * 6;
+					Projectile.velocity = (closestNPC.Center - Projectile.Center).SafeNormalize(Vector2.UnitX) * 18;
 					//Projectile.ai[0] = 0;
 				}
             }
@@ -99,6 +99,7 @@ namespace ANB.Projectiles.StarSwordProj
 			{
 				angle += rotSpeed;
 				if (angle > 360) angle -= 360;
+				
 				Main.instance.LoadProjectile(Projectile.type);
 				Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
 				Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
