@@ -107,7 +107,8 @@ namespace ANB.Projectiles.StarSwordProj
 				for (int k = 0; k < 3; k++)
 				{
 					Vector2 drawPos = (Projectile.position - Main.screenPosition)+Vector2.One.RotatedBy(MathHelper.ToRadians(k*120+angle))*50*MathF.Cos(MathHelper.ToRadians(Projectile.ai[0]*1.5f)) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-					Main.EntitySpriteDraw(texture, drawPos, null, Color.White, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+					Color color = Projectile.GetAlpha(lightColor) * ((Projectile.ai[0])/80f);
+					Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
 				}
 					return false;
 			}
