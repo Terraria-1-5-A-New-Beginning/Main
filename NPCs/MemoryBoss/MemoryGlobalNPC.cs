@@ -14,6 +14,8 @@ namespace ANB.NPCs.MemoryBoss
 {
     internal class MemoryGlobalNPC : GlobalNPC
     {
+        public override bool InstancePerEntity => true;
+        bool extraai = false;
         public static bool memory=false;
 
         public override void ResetEffects(NPC npc)
@@ -29,12 +31,46 @@ namespace ANB.NPCs.MemoryBoss
         {
             if (memory)
             {
-                npc.damage *= 5;
-                npc.lifeMax *= 20;
+                npc.damage *= 4;
+                npc.lifeMax *= 4;
                 npc.GivenName = "Blurred Memory";
                 NPC.setNPCName(npc.GivenOrTypeName, npc.type);
             }
             base.SetDefaults(npc);
+        }
+        public override void AI(NPC npc)
+        {
+            Main.player[npc.target].ZoneCrimson = true;
+            Main.player[npc.target].ZoneCorrupt = true;
+            Main.player[npc.target].ZoneJungle = true;
+            if (extraai == false)
+            {
+                extraai = true;
+                AI(npc);
+            }
+            extraai = false;
+            base.AI(npc);
+        }
+        public override void PostAI(NPC npc)
+        {
+            if (extraai == false)
+            {
+                extraai = true;
+                PostAI(npc);
+            }
+            extraai = false;
+            base.PostAI(npc);
+        }
+        public override bool PreAI(NPC npc)
+        {
+            if (extraai == false)
+            {
+                extraai = true;
+                PreAI(npc);
+            }
+            extraai = false;
+            base.PostAI(npc);
+            return base.PreAI(npc);
         }
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {

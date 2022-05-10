@@ -16,8 +16,7 @@ namespace ANB.NPCs.MemoryBoss
     {
         Vector2 FirstStageDestination = Vector2.Zero;
         Vector2 LastFirstStageDestination = Vector2.Zero;
-        
-        int timer=100;
+        int timer=1;
         int attacktype=0;
         bool first = true;
         bool KingSlime = false;
@@ -30,9 +29,13 @@ namespace ANB.NPCs.MemoryBoss
         bool Golem = false;
         bool Fishron = false;
         bool Empress = false;
-        bool Lunatic = false;
+        //bool Lunatic = false; NOPE.
         //bool MoonLord = false; NOPE.
-
+        public override void OnSpawn(IEntitySource source)
+        {
+            PickRandomAI();
+            base.OnSpawn(source);
+        }
         bool canbehit = true;
         NPC Memory = null;
         NPC Memory2 = null;
@@ -65,64 +68,150 @@ namespace ANB.NPCs.MemoryBoss
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.npcSlots = 10f;
-            NPC.defense = 200;
+            NPC.defense = 25;
             NPC.noGravity = true;
             NPC.aiAction = 0;
             NPC.aiStyle = 0;
             NPC.noTileCollide = true;
             NPC.boss = true;
             NPC.knockBackResist = 0f;
-            NPC.lifeMax = 200000;
-            NPC.life = 200000;
+            NPC.lifeMax = 100000;
+            NPC.life = 100000;
             base.SetDefaults();
+        }
+
+        public void PickRandomAI()
+        {
+            NPC.ai[0] = Main.rand.Next(0, 3);
+            NPC.ai[1] = 0;
+            timer = 0;
+            if (NPC.ai[0] == 0)
+            {
+                NPC.ai[1]= Main.rand.Next(0, 360);
+                timer= Main.rand.NextFromList(-1, 1);
+            }
+            Main.NewText(NPC.ai[0]);
         }
         private void bossAI()
         {
-            NPC.damage = 50;
-            NPC.alpha=0;
-            if (timer == 60 || timer == 50 || timer == 70)
+            switch (NPC.ai[0])
             {
-                Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
-                    (-NPC.Center + Main.player[NPC.target].Center)/7, ProjectileID.EyeLaser, 70, 0);
-            }
-
-            if ((timer == 0))
-            {
-                timer = 70;
-                if ((Main.netMode != NetmodeID.MultiplayerClient))
-                {
-                    //NPC.velocity *= 0.96f;//slowly stop.
-                    FirstStageDestination = -NPC.Center + Main.player[NPC.target].Center;
-                    //FirstStageDestination.Normalize();
-                    //FirstStageDestination = FirstStageDestination * 400;
-                    //FirstStageDestination = NPC.Center+(-NPC.Center + Main.player[NPC.target].Center + FirstStageDestination).RotateRandom(MathHelper.PiOver2);
-                    //FirstStageDestination *= 1.2f;
-                    Vector2 FFStageDest = FirstStageDestination;
-                    FFStageDest.Normalize();
-
-                    FirstStageDestination = NPC.Center + (FFStageDest*400+ FirstStageDestination).RotateRandom(MathHelper.PiOver4/2);
-                    //NPC.netUpdate = true;
-                }
-            }
-            Vector2 toDestination = FirstStageDestination - NPC.Center;
-                Vector2 toDestinationNormalized = toDestination.SafeNormalize(Vector2.UnitY);
-                float speed = Math.Min(400, toDestination.Length());
-                NPC.velocity = toDestinationNormalized * speed / 20;
-                if (FirstStageDestination != LastFirstStageDestination)
-                {
-                    if (Main.netMode != NetmodeID.Server)
+                case 1:
                     {
-                        // For visuals regarding NPC position, netOffset has to be concidered to make visuals align properly
-                        NPC.position += NPC.netOffset;
+                        NPC.damage = 50;
+                        NPC.alpha = 0;
+                        if (timer == 60 || timer == 50 || timer == 70)
+                        {
+                            Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
+                                (-NPC.Center + Main.player[NPC.target].Center) / 10, ProjectileID.EyeLaser, 70, 0);
+                        }
+                        if (NPC.ai[1] == 3)
+                        {
+                            PickRandomAI();
+                            return;
+                        }
+                        if ((timer == 0))
+                        {
+                            NPC.ai[1]++;
 
-                        // Draw a line between the NPC and its destination, represented as dusts every 20 pixels
-                        Dust.QuickDustLine(NPC.Center + toDestinationNormalized * NPC.width, FirstStageDestination, toDestination.Length() / 20f, Color.Purple);
+                            timer = 70;
+                            if ((Main.netMode != NetmodeID.MultiplayerClient))
+                            {
+                                //NPC.velocity *= 0.96f;//slowly stop.
+                                FirstStageDestination = -NPC.Center + Main.player[NPC.target].Center;
+                                //FirstStageDestination.Normalize();
+                                //FirstStageDestination = FirstStageDestination * 400;
+                                //FirstStageDestination = NPC.Center+(-NPC.Center + Main.player[NPC.target].Center + FirstStageDestination).RotateRandom(MathHelper.PiOver2);
+                                //FirstStageDestination *= 1.2f;
+                                Vector2 FFStageDest = FirstStageDestination;
+                                FFStageDest.Normalize();
+                                FirstStageDestination = NPC.Center + (FFStageDest * 400 + FirstStageDestination).RotateRandom(MathHelper.PiOver4 / 2);
+                                //NPC.netUpdate = true;
+                            }
+                        }
+                        Vector2 toDestination = FirstStageDestination - NPC.Center;
+                        Vector2 toDestinationNormalized = toDestination.SafeNormalize(Vector2.UnitY);
+                        float speed = Math.Min(400, toDestination.Length());
+                        NPC.velocity = toDestinationNormalized * speed / 20;
+                        if (FirstStageDestination != LastFirstStageDestination)
+                        {
+                            if (Main.netMode != NetmodeID.Server)
+                            {
+                                // For visuals regarding NPC position, netOffset has to be concidered to make visuals align properly
+                                NPC.position += NPC.netOffset;
 
-                        NPC.position -= NPC.netOffset;
+                                // Draw a line between the NPC and its destination, represented as dusts every 20 pixels
+                                Dust.QuickDustLine(NPC.Center + toDestinationNormalized * NPC.width, FirstStageDestination, toDestination.Length() / 20f, Color.Purple);
+
+                                NPC.position -= NPC.netOffset;
+                            }
+                        }
+                        LastFirstStageDestination = FirstStageDestination;
                     }
-                }
-                LastFirstStageDestination = FirstStageDestination;
-            
+                    break;
+                case 0:{
+                        NPC.ai[1]++;
+                        NPC.damage = 100;
+                        Vector2 place = NPC.Center;
+                        NPC.position = Main.player[NPC.target].Center + new Vector2(100+1 * NPC.ai[1]).RotatedBy(MathHelper.ToRadians(timer*NPC.ai[1]));
+                        
+                        if ((place-NPC.Center).Length() >= 32)
+                        {for (int h = 0; h < 3; h++)
+                            {
+                                Dust.NewDust(place, 2, 2, 20, newColor: Color.Purple, Scale:2);
+                                Dust.NewDust(NPC.Center, 2, 2, 20, newColor: Color.Purple, Scale: 2);
+                            }
+                            Dust.QuickDustLine(place , NPC.Center, (place - NPC.Center).Length() / 20f, Color.Purple);
+
+                        }
+
+                        if ((NPC.ai[1] % 12)==0 && NPC.ai[1]>30)
+                        {
+                            Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
+                                (-NPC.Center + Main.player[NPC.target].Center) / 20, ProjectileID.EyeLaser, 70, 0);
+                        }
+                        if (NPC.ai[1] == 360)
+                        {
+                            PickRandomAI();
+
+                        }
+                    }
+                    
+                    break;
+
+                case 2:
+                    {
+                        if (NPC.ai[1] == 30) { PickRandomAI(); }
+                        //timer++;
+                        NPC.position = LastFirstStageDestination;
+                        if (timer == 0)
+                        {
+                            Vector2 place = NPC.Center;
+                            NPC.position = Main.player[NPC.target].Center + new Vector2(100 + Main.rand.Next(0, 100)).RotatedBy(MathHelper.ToRadians(Main.rand.Next(0, 360)));
+                            LastFirstStageDestination = NPC.position;
+                            for (int h = 0; h < 3; h++)
+                            {
+                                Dust.NewDust(place, 2, 2, 20, newColor: Color.Purple, Scale: 2);
+                                Dust.NewDust(NPC.Center, 2, 2, 20, newColor: Color.Purple, Scale: 2);
+                            }
+                            timer = 20;
+                            NPC.ai[1]++;
+                            Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
+                                (-NPC.Center + Main.player[NPC.target].Center).SafeNormalize(Vector2.One), ProjectileID.EyeLaser, 70, 0);
+
+                            Dust.QuickDustLine(place, NPC.Center, (place - NPC.Center).Length() / 20f, Color.Purple);
+
+
+                        }
+
+                    }
+                    break;
+                default:
+                    {
+                        PickRandomAI();
+                    }
+                    break;
+            }
         }
         
         private void noAI()
@@ -140,13 +229,13 @@ namespace ANB.NPCs.MemoryBoss
                 timer = 40;
             }
 
+            NPC.ai[0] += 1.1f* NPC.ai[1];
+            if (MathF.Abs(NPC.ai[0]) > 360)
+            {
+                NPC.ai[0] = 0;
+            }
             if (attacktype == 0)
             {
-                NPC.ai[0] += 1.1f;
-                if (NPC.ai[0] > 360)
-                {
-                    NPC.ai[0] = 0;
-                }
                 if (!Main.player[NPC.target].dead)
                 {
 
@@ -167,7 +256,8 @@ namespace ANB.NPCs.MemoryBoss
             {
                 NPC.velocity = Vector2.Zero;
                 Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
-                    (-NPC.Center+Main.player[NPC.target].Center)/4, ProjectileID.EyeLaser, 30, 0);
+                    (-NPC.Center+Main.player[NPC.target].Center)/4, ProjectileID.EyeLaser, 80, 0);
+                NPC.ai[1] = Main.rand.NextFromList(-1, 1);
             }
 
         }
@@ -258,15 +348,31 @@ namespace ANB.NPCs.MemoryBoss
         
         public override void AI()
         {
+            Main.NewText(timer);
+            if ((Main.player[NPC.target].Center - NPC.Center).Length() >= 1000 && !Main.player[NPC.target].dead && !Main.player[NPC.target].active)
+            {
+                NPC.TargetClosest();
+                Vector2 place = NPC.Center;
+                NPC.Center = Main.player[NPC.target].Center - new Vector2(0, 100);
+                for (int h = 0; h < 3; h++)
+                {
+                    Dust.NewDust(place, 2, 2, 20, newColor: Color.Purple, Scale: 2);
+                    Dust.NewDust(NPC.Center, 2, 2, 20, newColor: Color.Purple, Scale: 2);
+                }
+                Dust.QuickDustLine(place, NPC.Center, (place - NPC.Center).Length() / 20f, Color.Purple);
+            }
             
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
                 NPC.TargetClosest();
             }
-            timer--;
-            if (timer < 0)
+            if (NPC.ai[0] != 0)
             {
-                timer = 0;
+                timer--;
+                if (timer < 0)
+                {
+                    timer = 0;
+                }
             }
             if (Main.player[NPC.target].dead)
             {
@@ -306,8 +412,7 @@ namespace ANB.NPCs.MemoryBoss
                 CheckBoss(0.25f, ref Golem, NPCID.Golem, "Epic Text", Color.Red);
                 CheckBoss(0.15f, ref Fishron, NPCID.DukeFishron, "Epic Text", Color.Red);
                 CheckBoss(0.07f, ref Empress, NPCID.EmpressButterfly, "Epic Text", Color.Red);
-                CheckBoss(0.02f, ref Lunatic, NPCID.CultistBoss, "Epic Text", Color.Red);
-
+                //CheckBoss(0.02f, ref Lunatic, NPCID.CultistBoss, "Epic Text", Color.Red); nope
 
                 NPC.netUpdate = true;
             }
