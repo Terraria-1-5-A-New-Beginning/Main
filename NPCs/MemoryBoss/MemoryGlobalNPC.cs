@@ -31,47 +31,48 @@ namespace ANB.NPCs.MemoryBoss
         {
             if (memory)
             {
-                npc.damage *= 4;
-                npc.lifeMax *= 4;
+                npc.damage *= 2;
+                npc.lifeMax *= 2;
                 npc.GivenName = "Blurred Memory";
                 NPC.setNPCName(npc.GivenOrTypeName, npc.type);
             }
             base.SetDefaults(npc);
         }
-        public override void AI(NPC npc)
-        {
-            Main.player[npc.target].ZoneCrimson = true;
-            Main.player[npc.target].ZoneCorrupt = true;
-            Main.player[npc.target].ZoneJungle = true;
-            if (extraai == false)
-            {
-                extraai = true;
-                AI(npc);
-            }
-            extraai = false;
-            base.AI(npc);
-        }
-        public override void PostAI(NPC npc)
-        {
-            if (extraai == false)
-            {
-                extraai = true;
-                PostAI(npc);
-            }
-            extraai = false;
-            base.PostAI(npc);
-        }
-        public override bool PreAI(NPC npc)
-        {
-            if (extraai == false)
-            {
-                extraai = true;
-                PreAI(npc);
-            }
-            extraai = false;
-            base.PostAI(npc);
-            return base.PreAI(npc);
-        }
+        //public override void AI(NPC npc)
+        //{
+        //    Main.player[npc.target].ZoneCrimson = true;
+        //    Main.player[npc.target].ZoneCorrupt = true;
+        //    Main.player[npc.target].ZoneJungle = true;
+        //    if (extraai == false)
+        //    {
+        //        extraai = true;
+        //        AI(npc);
+        //    }
+        //    extraai = false;
+        //    base.AI(npc);
+        //}
+        //public override void PostAI(NPC npc)
+        //{
+        //    if (extraai == false)
+        //    {
+        //        extraai = true;
+        //        PostAI(npc);
+        //    }
+        //    extraai = false;
+        //    base.PostAI(npc);
+        //}
+        //public override bool PreAI(NPC npc)
+        //{
+        //    if (extraai == false)
+        //    {
+        //        extraai = true;
+        //        PreAI(npc);
+        //    }
+        //    extraai = false;
+        //    base.PostAI(npc);
+        //    return base.PreAI(npc);
+        //}
+        
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             if (memory)

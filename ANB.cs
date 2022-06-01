@@ -9,6 +9,7 @@ namespace ANB
 	{
         public override void AddRecipeGroups()
         {
+            
             // Fish Group
             RecipeGroup group = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + "Fish", new int[]
             {

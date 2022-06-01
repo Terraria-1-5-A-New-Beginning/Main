@@ -40,14 +40,14 @@ namespace ANB.Items.RaterGun
         {
             return new Vector2(5,2);
         }
-        public override bool CanConsumeAmmo(Player player)
+        public override bool CanConsumeAmmo(Item ammo, Player player)
         {
 
             if (Main.rand.NextFloat(1) <= 0.33f)
             {
                 return false;
             }
-            return base.CanConsumeAmmo(player);
+            return base.CanConsumeAmmo(ammo, player);
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {

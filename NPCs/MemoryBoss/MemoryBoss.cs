@@ -36,6 +36,7 @@ namespace ANB.NPCs.MemoryBoss
             PickRandomAI();
             base.OnSpawn(source);
         }
+        
         bool canbehit = true;
         NPC Memory = null;
         NPC Memory2 = null;
@@ -62,6 +63,11 @@ namespace ANB.NPCs.MemoryBoss
         }
         public override void SetDefaults()
         {
+            if (!Main.dedServ)
+            {
+                Music = MusicLoader.GetMusicSlot(Mod, "Music/stng");
+            }
+            SceneEffectPriority = SceneEffectPriority.BossHigh;
             NPC.damage = 100;
             NPC.height = 52;
             NPC.width = 44;
@@ -75,8 +81,8 @@ namespace ANB.NPCs.MemoryBoss
             NPC.noTileCollide = true;
             NPC.boss = true;
             NPC.knockBackResist = 0f;
-            NPC.lifeMax = 100000;
-            NPC.life = 100000;
+            NPC.lifeMax = 80000;
+            NPC.life = 80000;
             base.SetDefaults();
         }
 
@@ -90,7 +96,7 @@ namespace ANB.NPCs.MemoryBoss
                 NPC.ai[1]= Main.rand.Next(0, 360);
                 timer= Main.rand.NextFromList(-1, 1);
             }
-            Main.NewText(NPC.ai[0]);
+            //Main.NewText(NPC.ai[0]);
         }
         private void bossAI()
         {
@@ -151,7 +157,7 @@ namespace ANB.NPCs.MemoryBoss
                     break;
                 case 0:{
                         NPC.ai[1]++;
-                        NPC.damage = 100;
+                        NPC.damage = 70;
                         Vector2 place = NPC.Center;
                         NPC.position = Main.player[NPC.target].Center + new Vector2(100+1 * NPC.ai[1]).RotatedBy(MathHelper.ToRadians(timer*NPC.ai[1]));
                         
@@ -165,10 +171,10 @@ namespace ANB.NPCs.MemoryBoss
 
                         }
 
-                        if ((NPC.ai[1] % 12)==0 && NPC.ai[1]>30)
+                        if ((NPC.ai[1] % 12)==0 && NPC.ai[1]>60)
                         {
                             Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
-                                (-NPC.Center + Main.player[NPC.target].Center) / 20, ProjectileID.EyeLaser, 70, 0);
+                                (-NPC.Center + Main.player[NPC.target].Center) / 20, ProjectileID.EyeLaser, 50, 0);
                         }
                         if (NPC.ai[1] == 360)
                         {
@@ -197,7 +203,7 @@ namespace ANB.NPCs.MemoryBoss
                             timer = 20;
                             NPC.ai[1]++;
                             Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
-                                (-NPC.Center + Main.player[NPC.target].Center).SafeNormalize(Vector2.One), ProjectileID.EyeLaser, 70, 0);
+                                (-NPC.Center + Main.player[NPC.target].Center).SafeNormalize(Vector2.One), ProjectileID.EyeLaser, 50, 0);
 
                             Dust.QuickDustLine(place, NPC.Center, (place - NPC.Center).Length() / 20f, Color.Purple);
 
@@ -256,7 +262,7 @@ namespace ANB.NPCs.MemoryBoss
             {
                 NPC.velocity = Vector2.Zero;
                 Projectile.NewProjectile(NPC.GetBossSpawnSource(NPC.target), NPC.Center,
-                    (-NPC.Center+Main.player[NPC.target].Center)/4, ProjectileID.EyeLaser, 80, 0);
+                    (-NPC.Center+Main.player[NPC.target].Center)/4, ProjectileID.EyeLaser, 50, 0);
                 NPC.ai[1] = Main.rand.NextFromList(-1, 1);
             }
 
